@@ -12,14 +12,16 @@ package Vista;
 
 import Extra.cargar;
 import com.sun.awt.AWTUtilities;
-import javax.swing.JSlider;
+import javax.swing.JOptionPane;
+import javax.xml.bind.JAXBElement;
+import org.datacontract.schemas._2004._07.sge_service_contracts.Autorizacion;
 
 /**
  *
  * @author Gachi
  */
 public class ventanaSplash extends javax.swing.JFrame {
-
+   
     /** Creates new form NewJFrame */
     double i=50, j=1;
     cargar hilo;
@@ -27,6 +29,11 @@ public class ventanaSplash extends javax.swing.JFrame {
         initComponents();
         iniciar();
         AWTUtilities.setWindowOpaque(this, false);
+        
+        //ESTE METODO DEVUELVE EL OBJETO AUTORIZACIÓN QUE ES EL QUE TIENE EL SIGN, TOKEN Y CUIL PARA PEDIR FACT ELECTRONICA//
+        String codigo = "59a49740-07f7-4350-9bba-0a03052a8c10"; 
+        Autorizacion a = solicitarAutorizacion(codigo);
+
     }
     public void iniciar(){
     progress.setVisible(false);
@@ -136,5 +143,11 @@ this.dispose();
      */
     public void setProgress(javax.swing.JProgressBar progress) {
         this.progress = progress;
-    }
+    }    
+       private static Autorizacion solicitarAutorizacion(java.lang.String codigo) {
+        service.contracts.service.istp1.LoginService service = new service.contracts.service.istp1.LoginService();
+        service.contracts.service.istp1.ILoginService port = service.getSGEAuthService();
+        return port.solicitarAutorizacion(codigo);
+    }     
+
 }
